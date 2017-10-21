@@ -1,7 +1,7 @@
 # To deploy
 
-> kubectl create -f deployments/videar.yml
+> make deploy
 
-# To serve
+# To cleanup local
 
-> kubectl create -f services/videar.yml
+> make clean

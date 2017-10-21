@@ -1,0 +1,54 @@
+version: '2'
+
+volumes:
+  assets:
+    external: false
+  configs:
+    external: false
+  db-data:
+    external: false
+
+services:
+  videar:
+    image: 'mkaichen/videar:latest'
+    env_file: .env
+    environment:
+      - PORT=80
+    ports:
+      - '80:80'
+    depends_on: 
+      - centralmongodb
+      - speech2text
+      - uniaudio
+
+  # handle speech to text and audio synthesis
+  speech2text:
+    image: mkaichen/s2t:latest
+    env_file: .env
+    environment:
+      - PORT=3000
+    ports:
+      - '3000:3000'
+    depends_on: 
+      - centralmongodb
+      - uniaudio
+
+  # obtain audio from multiple 3rd party sources
+  uniaudio:
+    image: mkaichen/uni_audio:latest
+    env_file: .env
+    environment:
+      - AUDIOSEARCH_APP_ID=$AUDIOSEARCH_APP_ID
+      - AUDIOSEARCH_SECRET=$AUDIOSEARCH_SECRET
+      - PORT=8080
+    ports:
+      - '8080:8000'
+    depends_on: 
+      - centralmongodb
+
+  # mongo
+  centralmongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - '27017:27017'
