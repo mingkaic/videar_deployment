@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: videar
   labels:
-    component: videar
+    run: videar
 spec:
   type: LoadBalancer
   ports:
@@ -13,7 +13,6 @@ spec:
   selector:
     app: videar
     tier: frontend
-    component: videar
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -27,7 +26,6 @@ spec:
         app: videar
         tier: frontend
         track: stable
-        component: videar
     spec:
       containers:
         - name: ui-container

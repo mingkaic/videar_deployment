@@ -8,6 +8,8 @@ DB=mongodb
 
 all: configmap deploy_db deploy_main deploy_s2t deploy_uas
 
+redeploy: clean all
+
 redeploy_main: clean_main deploy_main
 
 redeploy_s2t: clean_s2t deploy_s2t

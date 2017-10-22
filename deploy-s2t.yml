@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: s2t
   labels:
-    component: s2t
+    run: s2t
 spec:
   type: ClusterIP
   ports:
@@ -13,7 +13,6 @@ spec:
   selector:
     app: s2t
     tier: backend
-    component: s2t
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

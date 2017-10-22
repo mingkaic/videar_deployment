@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: uas
   labels:
-    component: uas
+    run: uas
 spec:
   type: ClusterIP
   ports:
@@ -13,7 +13,6 @@ spec:
   selector:
     app: uas
     tier: backend
-    component: uas
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment
