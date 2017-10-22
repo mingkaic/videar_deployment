@@ -1,0 +1,49 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: s2t
+  labels:
+    component: s2t
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: s2t-port
+      protocol: TCP
+  selector:
+    app: s2t
+    tier: backend
+    component: s2t
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: s2t
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: s2t
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: s2t-container
+          image: "mkaichen/s2t:latest"
+          ports:
+            - name: s2t-port
+              containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: db_host
+            - name: UAS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: uas_host
+            - name: UAS_PORT
+              value: '8080'

@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: uas
+  labels:
+    component: uas
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: uas-port
+      protocol: TCP
+  selector:
+    app: uas
+    tier: backend
+    component: uas
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: uas
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: uas
+        tier: backend
+        track: stable
+    spec:
+      containers:
+        - name: uas-container
+          image: "mkaichen/uni_audio:latest"
+          ports:
+            - name: uas-port
+              containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: db_host
+            - name: AUDIOSEARCH_APP_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: audiosearch_app_id
+            - name: AUDIOSEARCH_SECRET
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: audiosearch_secret

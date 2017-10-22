@@ -1,6 +1,10 @@
 # To deploy
 
-> make deploy
+Deploy everything
+
+> make
+
+
 
 # To cleanup local
 

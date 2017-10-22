@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: videar
+  labels:
+    component: videar
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: ui-port
+      protocol: TCP
+  selector:
+    app: videar
+    tier: frontend
+    component: videar
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: videar
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: videar
+        tier: frontend
+        track: stable
+        component: videar
+    spec:
+      containers:
+        - name: ui-container
+          image: "mkaichen/videar:latest"
+          ports:
+            - name: ui-port
+              containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: db_host
+            - name: S2T_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: s2t_host
+            - name: S2T_PORT
+              value: '8080'
+            - name: UAS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: videar-config
+                  key: uas_host
+            - name: UAS_PORT
+              value: '8080'
