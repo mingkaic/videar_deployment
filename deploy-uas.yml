@@ -49,3 +49,5 @@ spec:
                 configMapKeyRef:
                   name: videar-config
                   key: audiosearch_secret
+            - name: NODE_ENV
+              value: 'production'

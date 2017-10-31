@@ -7,6 +7,9 @@ UAS=uas
 DB=mongodb
 
 all: configmap deploy_db deploy_main deploy_s2t deploy_uas
+	$(KUB) create -f cronjob.yml
+
+update:
 
 redeploy: clean all
 
@@ -32,6 +35,7 @@ deploy_uas:
 	$(KUB) create -f deploy-$(UAS).yml
 
 clean: clean_configmap clean_db clean_main clean_s2t clean_uas
+	$(KUB) delete cronjob fpcache-updater
 
 clean_configmap:
 	$(KUB) delete configmap videar-config

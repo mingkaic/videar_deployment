@@ -53,3 +53,5 @@ spec:
                   key: uas_host
             - name: UAS_PORT
               value: '8080'
+            - name: NODE_ENV
+              value: 'production'

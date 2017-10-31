@@ -1,0 +1,17 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: fpcache-updater
+spec:
+  schedule: "10 1 * * *"
+  jobTemplate:
+    spech:
+      template:
+        spec:
+          containers:
+            - name: fpcache-updater
+              image: ubuntu:latest
+              args:
+                - curl
+                - http://videar/api/front\_page
+            restartPolicy: OnFailure
